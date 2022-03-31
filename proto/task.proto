@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package taskpb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "/taskpb";
+
+message Task {
+    string id = 1;
+    string user_id = 2;
+    string summary = 3;
+    google.protobuf.Timestamp performed_at = 4;
+}

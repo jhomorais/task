@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+    rabbitmq:
+        image: "rabbitmq:3.9.11-management"
+        container_name: rabbitmq
+        volumes:
+            - ./etc/rabbitmq/conf:/etc/rabbitmq/
+            - ./etc/rabbitmq/data/:/var/lib/rabbitmq/
+            - ./etc/rabbitmq/logs/:/var/log/rabbitmq/
+        ports:
+            - 4369:4369
+            - 5672:5672    #amqp
+            - 5673:5673
+            - 15672:15672  #http
+            - 15692:15692  #prometheus
+        healthcheck:
+            test: [ "CMD", "rabbitmqctl", "status"]
+            interval: 5s
+            timeout: 20s
+            retries: 5
+        networks:
+            - task-compose-network  
+
+    mysqlsrv:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "root"
+        ports:
+            - 3306:3306
+        volumes:
+            - ./etc/volumes/mysql/data:/var/lib/mysql
+            - ./db/structure.sql:/docker-entrypoint-initdb.d/structure.sql
+        networks:
+            - task-compose-network
+
+    mysqladmin:
+        image: adminer
+        ports:
+            - 8080:8080
+        networks:
+            - task-compose-network
+        
+    task:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: task
+        container_name: task
+        command: /bin/bash
+        tty: true
+        volumes:
+            - .:/task
+        depends_on:
+            - rabbitmq
+            - mysqlsrv
+            - mysqladmin
+        external_links:
+            - rabbitmq
+            - mysqlsrv
+        networks:
+            - task-compose-network
+
+networks:
+    task-compose-network:
+        driver: bridge        

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package taskpb;
+
+option go_package = "/taskpb";
+
+enum RoleType {
+    MANAGER = 0;
+    TECHNICIAN = 1;
+  }
+
+message User {
+    string id = 1;
+    string name = 2;
+    RoleType role = 3;
+}
