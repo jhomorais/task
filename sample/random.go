@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/brianvoe/gofakeit"
 	"github.com/google/uuid"
 )
 
@@ -41,4 +42,12 @@ func randomID() string {
 
 func randomSummary() string {
 	return randomStringFromSet("refactoring done", "bug fix", "performace improvment")
+}
+
+func randomEmail() string {
+	return gofakeit.Email()
+}
+
+func randomPassword() string {
+	return gofakeit.Password(true, true, true, true, true, 8)
 }

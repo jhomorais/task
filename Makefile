@@ -21,3 +21,14 @@ docker-exec:
 
 mockary:
 	~/go/bin/mockery --all
+
+create-volume:
+	docker volume create --name=mysql_task_data
+
+remove-volume:
+	docker volume rm mysql_task_data
+
+prepare-rabbitmq:
+	docker-compose up -d
+	cp rabbitmq.conf ./etc/rabbitmq/conf	
+	docker-compose down

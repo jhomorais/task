@@ -37,6 +37,52 @@ func (_m *TaskServiceServer) CreateTask(_a0 context.Context, _a1 *taskpb.CreateT
 	return r0, r1
 }
 
+// FindTask provides a mock function with given fields: _a0, _a1
+func (_m *TaskServiceServer) FindTask(_a0 context.Context, _a1 *taskpb.FindTaskRequest) (*taskpb.FindTaskResponse, error) {
+	ret := _m.Called(_a0, _a1)
+
+	var r0 *taskpb.FindTaskResponse
+	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.FindTaskRequest) *taskpb.FindTaskResponse); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*taskpb.FindTaskResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.FindTaskRequest) error); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ListTasks provides a mock function with given fields: _a0, _a1
+func (_m *TaskServiceServer) ListTasks(_a0 context.Context, _a1 *taskpb.ListTaskRequest) (*taskpb.ListTaskResponse, error) {
+	ret := _m.Called(_a0, _a1)
+
+	var r0 *taskpb.ListTaskResponse
+	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.ListTaskRequest) *taskpb.ListTaskResponse); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*taskpb.ListTaskResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.ListTaskRequest) error); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // mustEmbedUnimplementedTaskServiceServer provides a mock function with given fields:
 func (_m *TaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {
 	_m.Called()

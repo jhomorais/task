@@ -15,9 +15,9 @@ type RabbitMQ struct {
 	mock.Mock
 }
 
-// Close provides a mock function with given fields: ctx
-func (_m *RabbitMQ) Close(ctx context.Context) {
-	_m.Called(ctx)
+// Close provides a mock function with given fields:
+func (_m *RabbitMQ) Close() {
+	_m.Called()
 }
 
 // Consume provides a mock function with given fields: ctx

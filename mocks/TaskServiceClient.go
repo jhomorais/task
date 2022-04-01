@@ -46,3 +46,63 @@ func (_m *TaskServiceClient) CreateTask(ctx context.Context, in *taskpb.CreateTa
 
 	return r0, r1
 }
+
+// FindTask provides a mock function with given fields: ctx, in, opts
+func (_m *TaskServiceClient) FindTask(ctx context.Context, in *taskpb.FindTaskRequest, opts ...grpc.CallOption) (*taskpb.FindTaskResponse, error) {
+	_va := make([]interface{}, len(opts))
+	for _i := range opts {
+		_va[_i] = opts[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx, in)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *taskpb.FindTaskResponse
+	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.FindTaskRequest, ...grpc.CallOption) *taskpb.FindTaskResponse); ok {
+		r0 = rf(ctx, in, opts...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*taskpb.FindTaskResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.FindTaskRequest, ...grpc.CallOption) error); ok {
+		r1 = rf(ctx, in, opts...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ListTasks provides a mock function with given fields: ctx, in, opts
+func (_m *TaskServiceClient) ListTasks(ctx context.Context, in *taskpb.ListTaskRequest, opts ...grpc.CallOption) (*taskpb.ListTaskResponse, error) {
+	_va := make([]interface{}, len(opts))
+	for _i := range opts {
+		_va[_i] = opts[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx, in)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *taskpb.ListTaskResponse
+	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.ListTaskRequest, ...grpc.CallOption) *taskpb.ListTaskResponse); ok {
+		r0 = rf(ctx, in, opts...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*taskpb.ListTaskResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.ListTaskRequest, ...grpc.CallOption) error); ok {
+		r1 = rf(ctx, in, opts...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}

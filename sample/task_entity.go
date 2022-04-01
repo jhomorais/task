@@ -14,10 +14,10 @@ func init() {
 func NewTaskEntity() *entities.Task {
 
 	task := &entities.Task{
-		ID:         randomID(),
-		Summary:    randomSummary(),
-		RealizedAt: gofakeit.Date(),
-		UserID:     randomID(),
+		ID:          randomID(),
+		Summary:     randomSummary(),
+		PerformedAt: time.Now(),
+		UserID:      randomID(),
 	}
 
 	return task

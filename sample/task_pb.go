@@ -12,13 +12,13 @@ func init() {
 	gofakeit.Seed(time.Now().UnixNano())
 }
 
-func NewTaskPb() *taskpb.Task {
+func NewTaskPb(userId string) *taskpb.Task {
 
 	task := &taskpb.Task{
 		Id:          randomID(),
 		Summary:     randomSummary(),
-		PerformedAt: timestamppb.New(gofakeit.Date()),
-		UserId:      randomID(),
+		PerformedAt: timestamppb.New(time.Now()),
+		UserId:      userId,
 	}
 
 	return task

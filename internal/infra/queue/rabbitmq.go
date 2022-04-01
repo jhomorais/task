@@ -1,4 +1,4 @@
-package infra
+package queue
 
 import (
 	"context"
@@ -21,7 +21,7 @@ type RabbitMQ interface {
 	InitQueue(ctx context.Context) error
 	Publish(ctx context.Context, dados []byte) error
 	Consume(ctx context.Context) (<-chan amqp.Delivery, error)
-	Close(ctx context.Context)
+	Close()
 }
 
 func NewRabbitMQ(clientPath string,
@@ -130,7 +130,7 @@ func (r *rabbitMq) Consume(ctx context.Context) (<-chan amqp.Delivery, error) {
 	return msgs, nil
 }
 
-func (r *rabbitMq) Close(ctx context.Context) {
+func (r *rabbitMq) Close() {
 	r.ch.Close()
 	r.conn.Close()
 }

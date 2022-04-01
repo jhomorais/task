@@ -16,13 +16,23 @@ message CreateTaskResponse {
 
 message FindTaskRequest {
     string id = 1;
+    string userId = 2;
 }
 
 message FindTaskResponse {
     Task task = 1;
 }
 
+message ListTaskRequest {
+    string userId = 1;
+}
+
+message ListTaskResponse {
+    repeated Task tasks = 1;
+}
+
 service TaskService {
     rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {};
     rpc FindTask(FindTaskRequest) returns (FindTaskResponse) {};
+    rpc ListTasks(ListTaskRequest) returns (ListTaskResponse) {};
 }

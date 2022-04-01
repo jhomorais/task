@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
 	FindTask(ctx context.Context, in *FindTaskRequest, opts ...grpc.CallOption) (*FindTaskResponse, error)
+	ListTasks(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (*ListTaskResponse, error)
 }
 
 type taskServiceClient struct {
@@ -48,12 +49,22 @@ func (c *taskServiceClient) FindTask(ctx context.Context, in *FindTaskRequest, o
 	return out, nil
 }
 
+func (c *taskServiceClient) ListTasks(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (*ListTaskResponse, error) {
+	out := new(ListTaskResponse)
+	err := c.cc.Invoke(ctx, "/taskpb.TaskService/ListTasks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServiceServer is the server API for TaskService service.
 // All implementations must embed UnimplementedTaskServiceServer
 // for forward compatibility
 type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
 	FindTask(context.Context, *FindTaskRequest) (*FindTaskResponse, error)
+	ListTasks(context.Context, *ListTaskRequest) (*ListTaskResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -66,6 +77,9 @@ func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskReq
 }
 func (UnimplementedTaskServiceServer) FindTask(context.Context, *FindTaskRequest) (*FindTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindTask not implemented")
+}
+func (UnimplementedTaskServiceServer) ListTasks(context.Context, *ListTaskRequest) (*ListTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTasks not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
 
@@ -116,6 +130,24 @@ func _TaskService_FindTask_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_ListTasks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).ListTasks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/taskpb.TaskService/ListTasks",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).ListTasks(ctx, req.(*ListTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskService_ServiceDesc is the grpc.ServiceDesc for TaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +162,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindTask",
 			Handler:    _TaskService_FindTask_Handler,
+		},
+		{
+			MethodName: "ListTasks",
+			Handler:    _TaskService_ListTasks_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

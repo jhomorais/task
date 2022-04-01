@@ -3,7 +3,9 @@ package config
 import (
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
+	"runtime"
 
 	"github.com/spf13/viper"
 )
@@ -17,13 +19,15 @@ func BuildConfigFilePath(configFileName string) string {
 }
 
 func LoadServerEnvironmentVars() error {
-	dir, _ := os.Getwd()
+	_, filename, _, _ := runtime.Caller(0)
+	filePath := path.Join(path.Dir(filename), "config.json")
+	fmt.Println(filePath)
 
 	viper.SetDefault(ServerEnvironment, "config")
 	viper.SetConfigType("json")
 	viper.SetConfigName(viper.GetString(ServerEnvironment))
 
-	viper.AddConfigPath(dir)
+	viper.AddConfigPath(path.Dir(filename))
 
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -33,7 +37,7 @@ func LoadServerEnvironmentVars() error {
 	return err
 }
 
-func GetRabbitMqClient() string {
+func GetRabbitMQClient() string {
 	return viper.GetString("RABBITMQ_CLIENT")
 }
 
