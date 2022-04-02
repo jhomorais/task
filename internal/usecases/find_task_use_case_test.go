@@ -23,6 +23,8 @@ func TestFindTask(t *testing.T) {
 	taskRepositoryMock.On("FindTask", mock.Anything, task1.ID).Return(task1, nil)
 
 	t.Run("when taskId is invalid should return an error", func(t *testing.T) {
+		t.Parallel()
+
 		taskNoId := ""
 		taskInvalidId := "invalid-uuid"
 
@@ -41,6 +43,8 @@ func TestFindTask(t *testing.T) {
 	})
 
 	t.Run("when userId is invalid should return an error", func(t *testing.T) {
+		t.Parallel()
+
 		userNoId := ""
 		userInvalidId := "invalid-uuid"
 
@@ -59,6 +63,8 @@ func TestFindTask(t *testing.T) {
 	})
 
 	t.Run("when not found user should return an error", func(t *testing.T) {
+		t.Parallel()
+
 		errUserNotFound := errors.New("erro when try to find user")
 
 		userRepositoryMock := &mocks.UserRepository{}
@@ -72,6 +78,8 @@ func TestFindTask(t *testing.T) {
 	})
 
 	t.Run("when finding task error", func(t *testing.T) {
+		t.Parallel()
+
 		errTaskNotFound := errors.New("erro when try to find task")
 
 		userRepositoryMock := &mocks.UserRepository{}
@@ -88,6 +96,8 @@ func TestFindTask(t *testing.T) {
 	})
 
 	t.Run("when user role is equals to TECHNICIAN and user is not the owner of it", func(t *testing.T) {
+		t.Parallel()
+
 		userTec2 := sample.NewUserEntityRole(entities.ROLE_TECHNICIAN)
 
 		userRepositoryMock := &mocks.UserRepository{}
@@ -101,6 +111,8 @@ func TestFindTask(t *testing.T) {
 	})
 
 	t.Run("when successfully FindTask", func(t *testing.T) {
+		t.Parallel()
+
 		userRepositoryMock := &mocks.UserRepository{}
 		userRepositoryMock.On("FindById", mock.Anything, userTec1.ID).Return(userTec1, nil)
 

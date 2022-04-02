@@ -32,6 +32,8 @@ func TestListTask(t *testing.T) {
 	taskRepositoryMock.On("ListTask", mock.Anything).Return(listTask, nil)
 
 	t.Run("when userId is invalid should return an error", func(t *testing.T) {
+		t.Parallel()
+
 		userNoId := sample.NewUserEntityRole(entities.ROLE_TECHNICIAN)
 		userNoId.ID = ""
 
@@ -54,6 +56,7 @@ func TestListTask(t *testing.T) {
 	})
 
 	t.Run("when not found user should return an error", func(t *testing.T) {
+		t.Parallel()
 
 		errUserNotFound := errors.New("erro when try to find user")
 
@@ -69,6 +72,8 @@ func TestListTask(t *testing.T) {
 	})
 
 	t.Run("when user role is differente of MANAGER should return an error", func(t *testing.T) {
+		t.Parallel()
+
 		userRepositoryMock := &mocks.UserRepository{}
 		userRepositoryMock.On("FindById", context.Background(), userTec1.ID).Return(userTec1, nil)
 
@@ -81,6 +86,8 @@ func TestListTask(t *testing.T) {
 	})
 
 	t.Run("when ListTask return an error", func(t *testing.T) {
+		t.Parallel()
+
 		errDatabase := errors.New("databases error")
 		userManager := sample.NewUserEntityRole(entities.ROLE_MANAGER)
 
@@ -99,6 +106,8 @@ func TestListTask(t *testing.T) {
 	})
 
 	t.Run("when successfully ListTask", func(t *testing.T) {
+		t.Parallel()
+
 		userManager := sample.NewUserEntityRole(entities.ROLE_MANAGER)
 
 		userRepositoryMock := &mocks.UserRepository{}

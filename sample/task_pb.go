@@ -15,7 +15,6 @@ func init() {
 func NewTaskPb(userId string) *taskpb.Task {
 
 	task := &taskpb.Task{
-		Id:          RandomID(),
 		Summary:     RandomSummary(),
 		PerformedAt: timestamppb.New(time.Now()),
 		UserId:      userId,
