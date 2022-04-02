@@ -10,8 +10,8 @@ import (
 	"github.com/fgmaia/task/internal/usecases/ports/input"
 	"github.com/fgmaia/task/mocks"
 	"github.com/fgmaia/task/sample"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 //CreateTask test
@@ -52,8 +52,8 @@ func TestCreateTask(t *testing.T) {
 		}
 
 		output, err := createTaskUseCase.Execute(context.Background(), createTaskInput)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when userId is invalid should return an error", func(t *testing.T) {
@@ -75,8 +75,8 @@ func TestCreateTask(t *testing.T) {
 		}
 
 		output, err := createTaskUseCase.Execute(context.Background(), createTaskInput)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when not found user should return an error", func(t *testing.T) {
@@ -91,8 +91,8 @@ func TestCreateTask(t *testing.T) {
 			taskRepositoryMock, taskQueueMock)
 
 		output, err := createTaskUseCase.Execute(context.Background(), createTaskInput)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when user role is different of TECHNICIAN should return an error", func(t *testing.T) {
@@ -113,8 +113,8 @@ func TestCreateTask(t *testing.T) {
 		}
 
 		output, err := createTaskUseCase.Execute(context.Background(), createTaskInput)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when CreateTask db store returns an error", func(t *testing.T) {
@@ -138,8 +138,8 @@ func TestCreateTask(t *testing.T) {
 		}
 
 		output, err := createTaskUseCase.Execute(context.Background(), createTaskInput)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when successfully CreateTask", func(t *testing.T) {
@@ -158,8 +158,8 @@ func TestCreateTask(t *testing.T) {
 		}
 
 		output, err := createTaskUseCase.Execute(context.Background(), createTaskInput)
-		assert.NoError(t, err)
-		assert.NotNil(t, output)
+		require.NoError(t, err)
+		require.NotNil(t, output)
 	})
 
 }

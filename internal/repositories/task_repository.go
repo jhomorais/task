@@ -19,7 +19,7 @@ func NewTaskRepository(db *gorm.DB) TaskRepository {
 func (t *taskRepository) CreateTask(ctx context.Context, entity *entities.Task) error {
 	return t.db.
 		Session(&gorm.Session{FullSaveAssociations: false}).
-		Save(entity).
+		Create(entity).
 		Error
 }
 

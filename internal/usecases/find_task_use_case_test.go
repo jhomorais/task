@@ -9,8 +9,8 @@ import (
 	"github.com/fgmaia/task/internal/usecases"
 	"github.com/fgmaia/task/mocks"
 	"github.com/fgmaia/task/sample"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFindTask(t *testing.T) {
@@ -34,12 +34,12 @@ func TestFindTask(t *testing.T) {
 		findTaskUseCase := usecases.NewFindTaskUseCase(userRepositoryMock, taskRepositoryMock)
 
 		output, err := findTaskUseCase.Execute(context.Background(), userTec1.ID, taskNoId)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 
 		output, err = findTaskUseCase.Execute(context.Background(), userTec1.ID, taskInvalidId)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when userId is invalid should return an error", func(t *testing.T) {
@@ -54,12 +54,12 @@ func TestFindTask(t *testing.T) {
 		findTaskUseCase := usecases.NewFindTaskUseCase(userRepositoryMock, taskRepositoryMock)
 
 		output, err := findTaskUseCase.Execute(context.Background(), userNoId, task1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 
 		output, err = findTaskUseCase.Execute(context.Background(), userInvalidId, task1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when not found user should return an error", func(t *testing.T) {
@@ -73,8 +73,8 @@ func TestFindTask(t *testing.T) {
 		findTaskUseCase := usecases.NewFindTaskUseCase(userRepositoryMock, taskRepositoryMock)
 
 		output, err := findTaskUseCase.Execute(context.Background(), userTec1.ID, task1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when finding task error", func(t *testing.T) {
@@ -91,8 +91,8 @@ func TestFindTask(t *testing.T) {
 		findTaskUseCase := usecases.NewFindTaskUseCase(userRepositoryMock, taskRepositoryMock)
 
 		output, err := findTaskUseCase.Execute(context.Background(), userTec1.ID, task1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when user role is equals to TECHNICIAN and user is not the owner of it", func(t *testing.T) {
@@ -106,8 +106,8 @@ func TestFindTask(t *testing.T) {
 		findTaskUseCase := usecases.NewFindTaskUseCase(userRepositoryMock, taskRepositoryMock)
 
 		output, err := findTaskUseCase.Execute(context.Background(), userTec2.ID, task1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when successfully FindTask", func(t *testing.T) {
@@ -119,8 +119,8 @@ func TestFindTask(t *testing.T) {
 		findTaskUseCase := usecases.NewFindTaskUseCase(userRepositoryMock, taskRepositoryMock)
 
 		output, err := findTaskUseCase.Execute(context.Background(), userTec1.ID, task1.ID)
-		assert.NoError(t, err)
-		assert.NotNil(t, output)
+		require.NoError(t, err)
+		require.NotNil(t, output)
 	})
 
 }

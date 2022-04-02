@@ -9,8 +9,8 @@ import (
 	"github.com/fgmaia/task/internal/usecases"
 	"github.com/fgmaia/task/mocks"
 	"github.com/fgmaia/task/sample"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestListTask(t *testing.T) {
@@ -47,12 +47,12 @@ func TestListTask(t *testing.T) {
 			taskRepositoryMock)
 
 		output, err := listTaskUseCase.Execute(context.Background(), userNoId.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 
 		output, err = listTaskUseCase.Execute(context.Background(), userInvalidId.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when not found user should return an error", func(t *testing.T) {
@@ -67,8 +67,8 @@ func TestListTask(t *testing.T) {
 			taskRepositoryMock)
 
 		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when user role is differente of MANAGER should return an error", func(t *testing.T) {
@@ -81,8 +81,8 @@ func TestListTask(t *testing.T) {
 			taskRepositoryMock)
 
 		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when ListTask return an error", func(t *testing.T) {
@@ -101,8 +101,8 @@ func TestListTask(t *testing.T) {
 			taskRepositoryErrorMock)
 
 		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
-		assert.Error(t, err)
-		assert.Nil(t, output)
+		require.Error(t, err)
+		require.Nil(t, output)
 	})
 
 	t.Run("when successfully ListTask", func(t *testing.T) {
@@ -117,8 +117,8 @@ func TestListTask(t *testing.T) {
 			taskRepositoryMock)
 
 		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
-		assert.NoError(t, err)
-		assert.NotNil(t, output)
+		require.NoError(t, err)
+		require.NotNil(t, output)
 	})
 
 }

@@ -55,6 +55,12 @@ func (c *createTaskUseCase) Execute(ctx context.Context, createTask *input.Creat
 		return nil, fmt.Errorf("invalid user role only technicians can create tasks : %s", userEntity.ID)
 	}
 
+	//max 2500
+	if len(createTask.Summary) > 2500 {
+		//will discard the rest
+		createTask.Summary = createTask.Summary[:2500]
+	}
+
 	taskEntity := &entities.Task{
 		ID:          id.String(),
 		UserID:      createTask.UserID,

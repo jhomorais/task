@@ -11,8 +11,8 @@ import (
 	"github.com/fgmaia/task/mocks"
 	"github.com/fgmaia/task/pb/taskpb"
 	"github.com/fgmaia/task/sample"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -30,12 +30,14 @@ func TestServerCreateTask(t *testing.T) {
 		dependencies.Repositories.TaskRepository, taskQueueMock)
 
 	userTec, err := dependencies.Repositories.UserRepository.FindByEmail(context.Background(), "technician@gmail.com")
-	assert.NoError(t, err)
-	assert.NotNil(t, userTec)
+	require.NoError(t, err)
+	require.NotNil(t, userTec)
+	require.NotEmpty(t, userTec.ID)
 
 	userManager, err := dependencies.Repositories.UserRepository.FindByEmail(context.Background(), "manager@gmail.com")
-	assert.NoError(t, err)
-	assert.NotNil(t, userManager)
+	require.NoError(t, err)
+	require.NotNil(t, userManager)
+	require.NotEmpty(t, userManager.ID)
 
 	t.Run("when invalid userId should return an error", func(t *testing.T) {
 		t.Parallel()
@@ -52,12 +54,12 @@ func TestServerCreateTask(t *testing.T) {
 			dependencies.Usecases.ListTaskUseCase)
 
 		res, err := server.CreateTask(ctx, req)
-		assert.Error(t, err)
-		assert.Nil(t, res)
+		require.Error(t, err)
+		require.Nil(t, res)
 
 		st, ok := status.FromError(err)
-		assert.True(t, ok)
-		assert.NotEqual(t, st.Code(), codes.OK)
+		require.True(t, ok)
+		require.NotEqual(t, st.Code(), codes.OK)
 	})
 
 	t.Run("when database error", func(t *testing.T) {
@@ -83,12 +85,12 @@ func TestServerCreateTask(t *testing.T) {
 			dependencies.Usecases.ListTaskUseCase)
 
 		res, err := server.CreateTask(ctx, req)
-		assert.Error(t, err)
-		assert.Nil(t, res)
+		require.Error(t, err)
+		require.Nil(t, res)
 
 		st, ok := status.FromError(err)
-		assert.True(t, ok)
-		assert.NotEqual(t, st.Code(), codes.OK)
+		require.True(t, ok)
+		require.NotEqual(t, st.Code(), codes.OK)
 	})
 
 	t.Run("when create a task with an user(role manager) should return an error", func(t *testing.T) {
@@ -106,12 +108,12 @@ func TestServerCreateTask(t *testing.T) {
 			dependencies.Usecases.ListTaskUseCase)
 
 		res, err := server.CreateTask(ctx, req)
-		assert.Error(t, err)
-		assert.Nil(t, res)
+		require.Error(t, err)
+		require.Nil(t, res)
 
 		st, ok := status.FromError(err)
-		assert.True(t, ok)
-		assert.NotEqual(t, st.Code(), codes.OK)
+		require.True(t, ok)
+		require.NotEqual(t, st.Code(), codes.OK)
 	})
 
 	t.Run("when success create task", func(t *testing.T) {
@@ -129,13 +131,13 @@ func TestServerCreateTask(t *testing.T) {
 			dependencies.Usecases.ListTaskUseCase)
 
 		res, err := server.CreateTask(ctx, req)
-		assert.NoError(t, err)
-		assert.NotNil(t, res)
+		require.NoError(t, err)
+		require.NotNil(t, res)
+		require.NotEmpty(t, res.Id)
 
 		st, ok := status.FromError(err)
-		assert.True(t, ok)
-		assert.Equal(t, st.Code(), codes.OK)
-		assert.NotEmpty(t, res.Id)
+		require.True(t, ok)
+		require.Equal(t, st.Code(), codes.OK)
 	})
 
 }
