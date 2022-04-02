@@ -68,6 +68,10 @@ make gen-rpc
 
 ## for more options open Makefile archive
 
-![alt text](https://github.com/fgmaia/task/blob/master/how_to_test_console?raw=true)
+## Example
 
-![alt text](https://github.com/fgmaia/task/blob/master/how_to_test_console1?raw=true)
+![alt text](https://github.com/fgmaia/task/blob/master/how_to_test_console.png?raw=true)
+
+## Some tests
+
+![alt text](https://github.com/fgmaia/task/blob/master/how_to_test_console1.png?raw=true)
