@@ -12,13 +12,17 @@ func init() {
 }
 
 func NewTaskEntity() *entities.Task {
+	user := NewUserEntityRole(entities.ROLE_TECHNICIAN)
+	return NewTaskEntityWithUser(*user)
+}
 
+func NewTaskEntityWithUser(user entities.User) *entities.Task {
 	task := &entities.Task{
-		ID:          randomID(),
-		Summary:     randomSummary(),
+		ID:          RandomID(),
+		Summary:     RandomSummary(),
 		PerformedAt: time.Now(),
-		UserID:      randomID(),
+		User:        user,
+		UserID:      user.ID,
 	}
-
 	return task
 }

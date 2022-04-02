@@ -7,7 +7,6 @@ import (
 	"github.com/fgmaia/task/internal/domain/entities"
 	"github.com/fgmaia/task/internal/repositories"
 	"github.com/fgmaia/task/internal/usecases/contracts"
-	"github.com/fgmaia/task/internal/usecases/ports/input"
 	"github.com/fgmaia/task/internal/usecases/ports/output"
 	"github.com/fgmaia/task/internal/usecases/validator"
 )
@@ -26,13 +25,13 @@ func NewListTaskUseCase(userRepository repositories.UserRepository,
 	}
 }
 
-func (l *listTaskUseCase) Execute(ctx context.Context, input *input.ListTaskInput) (*output.ListTaskOutput, error) {
+func (l *listTaskUseCase) Execute(ctx context.Context, userID string) (*output.ListTaskOutput, error) {
 
-	if err := validator.ValidateUUId(input.UserID, true, "userId"); err != nil {
+	if err := validator.ValidateUUId(userID, true, "userId"); err != nil {
 		return nil, err
 	}
 
-	userEntity, err := l.userRepository.FindById(ctx, input.UserID)
+	userEntity, err := l.userRepository.FindById(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("erro when try to find user: %v", err)
 	}

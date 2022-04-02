@@ -12,7 +12,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func randomStringFromSet(a ...string) string {
+func RandomStringFromSet(a ...string) string {
 	n := len(a)
 	if n == 0 {
 		return ""
@@ -20,28 +20,28 @@ func randomStringFromSet(a ...string) string {
 	return a[rand.Intn(n)]
 }
 
-func randomBool() bool {
+func RandomBool() bool {
 	return rand.Intn(2) == 1
 }
 
-func randomInt(min, max int) int {
+func RandomInt(min, max int) int {
 	return min + rand.Int()%(max-min+1)
 }
 
-func randomFloat64(min, max float64) float64 {
+func RandomFloat64(min, max float64) float64 {
 	return min + rand.Float64()*(max-min)
 }
 
-func randomFloat32(min, max float32) float32 {
+func RandomFloat32(min, max float32) float32 {
 	return min + rand.Float32()*(max-min)
 }
 
-func randomID() string {
+func RandomID() string {
 	return uuid.New().String()
 }
 
-func randomSummary() string {
-	return randomStringFromSet("refactoring done", "bug fix", "performace improvment")
+func RandomSummary() string {
+	return RandomStringFromSet("refactoring done", "bug fix", "performace improvment")
 }
 
 func randomEmail() string {

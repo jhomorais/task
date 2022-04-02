@@ -13,13 +13,17 @@ func init() {
 
 func NewUserEntity() *entities.User {
 
-	randomRole := randomStringFromSet(entities.ROLE_TECHNICIAN.String(), entities.ROLE_MANAGER.String())
+	randomRole := RandomStringFromSet(entities.ROLE_TECHNICIAN.String(), entities.ROLE_MANAGER.String())
+	return NewUserEntityRole(entities.Role(randomRole))
+}
+
+func NewUserEntityRole(role entities.Role) *entities.User {
 
 	user := &entities.User{
-		ID:       randomID(),
+		ID:       RandomID(),
 		Email:    gofakeit.Email(),
 		Password: gofakeit.Password(true, true, true, true, true, 8),
-		Role:     entities.Role(randomRole),
+		Role:     role,
 	}
 
 	return user

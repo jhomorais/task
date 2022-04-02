@@ -63,12 +63,7 @@ func (t *TaskServer) CreateTask(ctx context.Context, req *taskpb.CreateTaskReque
 func (t *TaskServer) FindTask(ctx context.Context, req *taskpb.FindTaskRequest) (*taskpb.FindTaskResponse, error) {
 	fmt.Printf("receive a create-task request with: %s", req.Id)
 
-	findTaskInput := &input.FindTaskInput{
-		TaskID: req.Id,
-		UserID: req.UserId,
-	}
-
-	output, err := t.findTaskUseCase.Execute(ctx, findTaskInput)
+	output, err := t.findTaskUseCase.Execute(ctx, req.UserId, req.Id)
 
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "error find task at database: %v", err)
@@ -91,11 +86,7 @@ func (t *TaskServer) FindTask(ctx context.Context, req *taskpb.FindTaskRequest) 
 //Perform List Tasks
 func (t *TaskServer) ListTasks(ctx context.Context, req *taskpb.ListTaskRequest) (*taskpb.ListTaskResponse, error) {
 
-	listTaskInput := &input.ListTaskInput{
-		UserID: req.UserId,
-	}
-
-	output, err := t.listTaskUseCase.Execute(ctx, listTaskInput)
+	output, err := t.listTaskUseCase.Execute(ctx, req.UserId)
 
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "error listing tasks at database: %v", err)

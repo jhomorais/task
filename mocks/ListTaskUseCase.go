@@ -5,8 +5,6 @@ package mocks
 import (
 	context "context"
 
-	input "github.com/fgmaia/task/internal/usecases/ports/input"
-
 	mock "github.com/stretchr/testify/mock"
 
 	output "github.com/fgmaia/task/internal/usecases/ports/output"
@@ -17,13 +15,13 @@ type ListTaskUseCase struct {
 	mock.Mock
 }
 
-// Execute provides a mock function with given fields: ctx, findTask
-func (_m *ListTaskUseCase) Execute(ctx context.Context, findTask *input.ListTaskInput) (*output.ListTaskOutput, error) {
-	ret := _m.Called(ctx, findTask)
+// Execute provides a mock function with given fields: ctx, userID
+func (_m *ListTaskUseCase) Execute(ctx context.Context, userID string) (*output.ListTaskOutput, error) {
+	ret := _m.Called(ctx, userID)
 
 	var r0 *output.ListTaskOutput
-	if rf, ok := ret.Get(0).(func(context.Context, *input.ListTaskInput) *output.ListTaskOutput); ok {
-		r0 = rf(ctx, findTask)
+	if rf, ok := ret.Get(0).(func(context.Context, string) *output.ListTaskOutput); ok {
+		r0 = rf(ctx, userID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*output.ListTaskOutput)
@@ -31,8 +29,8 @@ func (_m *ListTaskUseCase) Execute(ctx context.Context, findTask *input.ListTask
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *input.ListTaskInput) error); ok {
-		r1 = rf(ctx, findTask)
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, userID)
 	} else {
 		r1 = ret.Error(1)
 	}

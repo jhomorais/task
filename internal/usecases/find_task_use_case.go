@@ -2,12 +2,12 @@ package usecases
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/fgmaia/task/internal/domain/entities"
 	"github.com/fgmaia/task/internal/repositories"
 	"github.com/fgmaia/task/internal/usecases/contracts"
-	"github.com/fgmaia/task/internal/usecases/ports/input"
 	"github.com/fgmaia/task/internal/usecases/ports/output"
 	"github.com/fgmaia/task/internal/usecases/validator"
 )
@@ -26,17 +26,17 @@ func NewFindTaskUseCase(userRepository repositories.UserRepository,
 	}
 }
 
-func (c *findTaskUseCase) Execute(ctx context.Context, findTask *input.FindTaskInput) (*output.FindTaskOutput, error) {
+func (c *findTaskUseCase) Execute(ctx context.Context, userID string, taskID string) (*output.FindTaskOutput, error) {
 
-	if err := validator.ValidateUUId(findTask.TaskID, true, "taskId"); err != nil {
+	if err := validator.ValidateUUId(taskID, true, "taskId"); err != nil {
 		return nil, err
 	}
 
-	if err := validator.ValidateUUId(findTask.UserID, true, "userId"); err != nil {
+	if err := validator.ValidateUUId(userID, true, "userId"); err != nil {
 		return nil, err
 	}
 
-	userEntity, err := c.userRepository.FindById(ctx, findTask.UserID)
+	userEntity, err := c.userRepository.FindById(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("erro when try to find user: %v", err)
 	}
@@ -45,11 +45,15 @@ func (c *findTaskUseCase) Execute(ctx context.Context, findTask *input.FindTaskI
 		return nil, fmt.Errorf("userID not found")
 	}
 
-	taskEntity, err := c.taskRepository.FindTask(ctx, findTask.TaskID)
+	taskEntity, err := c.taskRepository.FindTask(ctx, taskID)
+
+	if err != nil {
+		return nil, fmt.Errorf("error when try to find a task: %w", err)
+	}
 
 	if userEntity.Role == entities.ROLE_TECHNICIAN {
 		if userEntity.ID != taskEntity.User.ID {
-			return nil, fmt.Errorf("error this task do not belong to the user")
+			return nil, errors.New("error this task do not belong to the user")
 		}
 	}
 

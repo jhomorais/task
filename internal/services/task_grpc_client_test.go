@@ -17,7 +17,9 @@ import (
 	"google.golang.org/grpc"
 )
 
-func TestIntegrationClient(t *testing.T) {
+//TODO finalizar
+
+func TestGrpcClient(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
