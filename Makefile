@@ -28,9 +28,10 @@ create-volume:
 remove-volume:
 	docker volume rm mysql_task_data
 
-prepare-rabbitmq:
+prepare_rabbitmq:
+	mkdir -p etc/rabbitmq/conf	
+	sudo cp rabbitmq.conf ./etc/rabbitmq/conf	
 	docker-compose up -d
-	cp rabbitmq.conf ./etc/rabbitmq/conf	
 	docker-compose down
 
 run-read-queue-worker:

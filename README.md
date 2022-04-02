@@ -23,21 +23,28 @@ make prepare-rabbitmq
 then
 
 ```bash
-docker-compose up -d
+make compose-up
 ```
 
 This command will start all containers with docker-compose.
 
+### open 3 consoles and run
+```bash
+make docker-exec
+```
+
 Now we are ready to start the application.
 
-### Start queue worker to read messages from rabbitMQ queue
-```bash
-make run-read-queue-worker
-```
+### For each console opened
 
 ### Start grpc server in new terminal
 ```bash
 make run-grpc-server
+```
+
+### Start queue worker to read messages from rabbitMQ queue
+```bash
+make run-read-queue-worker
 ```
 
 ### Run client to create task

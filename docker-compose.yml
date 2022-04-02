@@ -7,8 +7,6 @@ services:
         restart: "always"
         volumes:
             - ./etc/rabbitmq/conf:/etc/rabbitmq/
-            - ./etc/rabbitmq/data/:/var/lib/rabbitmq/
-            - ./etc/rabbitmq/logs/:/var/log/rabbitmq/
         ports:
             - 4369:4369
             - 5672:5672    #amqp
