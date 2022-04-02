@@ -18,24 +18,27 @@ type TaskServer struct {
 	createTaskUseCase                     contracts.CreateTaskUseCase
 	findTaskUseCase                       contracts.FindTaskUseCase
 	listTaskUseCase                       contracts.ListTaskUseCase
+	loginUseCase                          contracts.LoginUseCase
 }
 
 //NewTaskServer returns a new TaskServer
 func NewTaskServer(createTaskUseCase contracts.CreateTaskUseCase,
 	findTaskUseCase contracts.FindTaskUseCase,
-	listTaskUseCase contracts.ListTaskUseCase) *TaskServer {
+	listTaskUseCase contracts.ListTaskUseCase,
+	loginUseCase contracts.LoginUseCase) *TaskServer {
 
 	return &TaskServer{
 		createTaskUseCase: createTaskUseCase,
 		findTaskUseCase:   findTaskUseCase,
 		listTaskUseCase:   listTaskUseCase,
+		loginUseCase:      loginUseCase,
 	}
 }
 
 //CreateTask is a unary RPC to create a new task
 func (t *TaskServer) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest) (*taskpb.CreateTaskResponse, error) {
 	task := req.Task
-	fmt.Printf("receive a create-task request with: %s", task.Id)
+	fmt.Printf("receive a create-task with: %s", task.Summary)
 
 	createTaskInput := &input.CreateTaskInput{
 		Summary:     task.Summary,
@@ -110,6 +113,31 @@ func (t *TaskServer) ListTasks(ctx context.Context, req *taskpb.ListTaskRequest)
 
 	res := &taskpb.ListTaskResponse{
 		Tasks: taskspb,
+	}
+
+	return res, nil
+}
+
+func (t *TaskServer) Login(ctx context.Context, req *taskpb.LoginRequest) (*taskpb.LoginResponse, error) {
+
+	output, err := t.loginUseCase.Execute(ctx, req.Email, req.Password)
+
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "error when try to login: %v", err)
+	}
+
+	if output == nil {
+		return nil, status.Error(codes.Internal, "could not login, try again")
+	}
+
+	userID := ""
+
+	if output.User != nil {
+		userID = output.User.ID
+	}
+
+	res := &taskpb.LoginResponse{
+		UserId: userID,
 	}
 
 	return res, nil

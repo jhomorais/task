@@ -37,17 +37,17 @@ func NewRabbitMQ(clientPath string,
 func (r *rabbitMq) InitQueue(ctx context.Context) error {
 	var err error
 
-	fmt.Printf("INIT QUEUE %s", r.queueName)
+	fmt.Printf("INIT QUEUE %s\n", r.queueName)
 
 	r.conn, err = amqp.Dial(r.clientPath)
 	if err != nil {
-		fmt.Printf("failed to connect to rabbitmq. %s", err.Error())
+		fmt.Printf("failed to connect to rabbitmq. %s\n", err.Error())
 		return err
 	}
 
 	r.ch, err = r.conn.Channel()
 	if err != nil {
-		fmt.Printf("failed to create a channel rabbitmq. %s", err.Error())
+		fmt.Printf("failed to create a channel rabbitmq. %s\n", err.Error())
 		return err
 	}
 
@@ -61,7 +61,7 @@ func (r *rabbitMq) InitQueue(ctx context.Context) error {
 	)
 
 	if err != nil {
-		fmt.Printf("failed to declare a exchange. %s", err.Error())
+		fmt.Printf("failed to declare a exchange. %s\n", err.Error())
 		return err
 	}
 
@@ -74,7 +74,7 @@ func (r *rabbitMq) InitQueue(ctx context.Context) error {
 	)
 
 	if err != nil {
-		fmt.Printf("failed to declare a queue. %s", err.Error())
+		fmt.Printf("failed to declare a queue. %s\n", err.Error())
 		return err
 	}
 
@@ -106,7 +106,7 @@ func (r *rabbitMq) Publish(ctx context.Context, dados []byte) error {
 		})
 
 	if err != nil {
-		fmt.Printf("failed to publish a message. %s", err.Error())
+		fmt.Printf("failed to publish a message. %s\n", err.Error())
 		return err
 	}
 	return nil

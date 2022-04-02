@@ -28,6 +28,7 @@ type Usecases struct {
 	CreateTaskUseCase contracts.CreateTaskUseCase
 	FindTaskUseCase   contracts.FindTaskUseCase
 	ListTaskUseCase   contracts.ListTaskUseCase
+	LoginUseCase      contracts.LoginUseCase
 }
 
 func NewBuild() *DenpencyBuild {
@@ -76,6 +77,7 @@ func (d *DenpencyBuild) buildUseCases() *DenpencyBuild {
 		d.TaskQueue)
 	d.Usecases.FindTaskUseCase = usecases.NewFindTaskUseCase(d.Repositories.UserRepository, d.Repositories.TaskRepository)
 	d.Usecases.ListTaskUseCase = usecases.NewListTaskUseCase(d.Repositories.UserRepository, d.Repositories.TaskRepository)
+	d.Usecases.LoginUseCase = usecases.NewLoginUseCase(d.Repositories.UserRepository)
 
 	return d
 }

@@ -1,9 +1,7 @@
-#TODO FINALIZAR
-
-# Task project demo test
+# Task project demo
 
 ## Purpose
-Task project demo test
+Task project demo
 
 ## Dependencies
 - Docker
@@ -12,34 +10,40 @@ Task project demo test
 ## Getting Started
 
 First create the db docker volume:
-
-`docker volume create --name=mysql_task_data`
-
-If want to clean volume run and create it again
-
-`docker volume rm mysql_task_data`
+```bash
+docker volume create --name=mysql_task_data
+```
 
 Now execute
 
-`make prepare-rabbitmq`
+```bash
+make prepare-rabbitmq
+```
 
-and
+then
 
-`docker-compose up -d`
+```bash
+docker-compose up -d
+```
 
 This command will start all containers with docker-compose.
 
 Now we are ready to start the application.
 
-`docker exec -it task /bin/bash`
+### Start queue worker to read messages from rabbitMQ queue
+```bash
+make run-read-queue-worker
+```
 
-To start all workers:
+### Start grpc server in new terminal
+```bash
+make run-grpc-server
+```
 
-`go run main.go`
-
-And start the server with:
-
-`go run cmd/server/main.go`
+### Run client to create task
+```bash
+go run cmd/grpclient/main.go TASK_SUMMARY
+```
 
 ## Make commands
 
@@ -51,3 +55,19 @@ make test
 ```bash
 make mock
 ```
+
+### Gen proto files
+```bash
+make gen-proto
+```
+
+### Gen rpc files
+```bash
+make gen-rpc
+```
+
+## for more options open Makefile archive
+
+![alt text](https://github.com/fgmaia/task/blob/master/how_to_test_console?raw=true)
+
+![alt text](https://github.com/fgmaia/task/blob/master/how_to_test_console1?raw=true)

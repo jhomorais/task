@@ -32,3 +32,9 @@ prepare-rabbitmq:
 	docker-compose up -d
 	cp rabbitmq.conf ./etc/rabbitmq/conf	
 	docker-compose down
+
+run-read-queue-worker:
+	go run cmd/workers/taskqueueworker/main.go
+
+run-grpc-server:
+	go run cmd/grpcserver/main.go	

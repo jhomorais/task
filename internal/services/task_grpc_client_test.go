@@ -42,7 +42,8 @@ func TestGrpcClient(t *testing.T) {
 	//init server and inject repositories and queue
 	taskServer := services.NewTaskServer(createTaskUseCase,
 		dependencies.Usecases.FindTaskUseCase,
-		dependencies.Usecases.ListTaskUseCase)
+		dependencies.Usecases.ListTaskUseCase,
+		dependencies.Usecases.LoginUseCase)
 
 	grpcServer := grpc.NewServer()
 	taskpb.RegisterTaskServiceServer(grpcServer, taskServer)

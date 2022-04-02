@@ -51,7 +51,8 @@ func TestServerCreateTask(t *testing.T) {
 		ctx := context.Background()
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
-			dependencies.Usecases.ListTaskUseCase)
+			dependencies.Usecases.ListTaskUseCase,
+			dependencies.Usecases.LoginUseCase)
 
 		res, err := server.CreateTask(ctx, req)
 		require.Error(t, err)
@@ -82,7 +83,8 @@ func TestServerCreateTask(t *testing.T) {
 		ctx := context.Background()
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
-			dependencies.Usecases.ListTaskUseCase)
+			dependencies.Usecases.ListTaskUseCase,
+			dependencies.Usecases.LoginUseCase)
 
 		res, err := server.CreateTask(ctx, req)
 		require.Error(t, err)
@@ -105,7 +107,8 @@ func TestServerCreateTask(t *testing.T) {
 		ctx := context.Background()
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
-			dependencies.Usecases.ListTaskUseCase)
+			dependencies.Usecases.ListTaskUseCase,
+			dependencies.Usecases.LoginUseCase)
 
 		res, err := server.CreateTask(ctx, req)
 		require.Error(t, err)
@@ -128,7 +131,8 @@ func TestServerCreateTask(t *testing.T) {
 		ctx := context.Background()
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
-			dependencies.Usecases.ListTaskUseCase)
+			dependencies.Usecases.ListTaskUseCase,
+			dependencies.Usecases.LoginUseCase)
 
 		res, err := server.CreateTask(ctx, req)
 		require.NoError(t, err)
