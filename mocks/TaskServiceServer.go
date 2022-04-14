@@ -61,20 +61,34 @@ func (_m *TaskServiceServer) FindTask(_a0 context.Context, _a1 *taskpb.FindTaskR
 }
 
 // ListTasks provides a mock function with given fields: _a0, _a1
-func (_m *TaskServiceServer) ListTasks(_a0 context.Context, _a1 *taskpb.ListTaskRequest) (*taskpb.ListTaskResponse, error) {
+func (_m *TaskServiceServer) ListTasks(_a0 *taskpb.ListTaskRequest, _a1 taskpb.TaskService_ListTasksServer) error {
 	ret := _m.Called(_a0, _a1)
 
-	var r0 *taskpb.ListTaskResponse
-	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.ListTaskRequest) *taskpb.ListTaskResponse); ok {
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*taskpb.ListTaskRequest, taskpb.TaskService_ListTasksServer) error); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// Login provides a mock function with given fields: _a0, _a1
+func (_m *TaskServiceServer) Login(_a0 context.Context, _a1 *taskpb.LoginRequest) (*taskpb.LoginResponse, error) {
+	ret := _m.Called(_a0, _a1)
+
+	var r0 *taskpb.LoginResponse
+	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.LoginRequest) *taskpb.LoginResponse); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*taskpb.ListTaskResponse)
+			r0 = ret.Get(0).(*taskpb.LoginResponse)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.ListTaskRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.LoginRequest) error); ok {
 		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)

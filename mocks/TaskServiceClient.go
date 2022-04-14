@@ -78,7 +78,7 @@ func (_m *TaskServiceClient) FindTask(ctx context.Context, in *taskpb.FindTaskRe
 }
 
 // ListTasks provides a mock function with given fields: ctx, in, opts
-func (_m *TaskServiceClient) ListTasks(ctx context.Context, in *taskpb.ListTaskRequest, opts ...grpc.CallOption) (*taskpb.ListTaskResponse, error) {
+func (_m *TaskServiceClient) ListTasks(ctx context.Context, in *taskpb.ListTaskRequest, opts ...grpc.CallOption) (taskpb.TaskService_ListTasksClient, error) {
 	_va := make([]interface{}, len(opts))
 	for _i := range opts {
 		_va[_i] = opts[_i]
@@ -88,17 +88,47 @@ func (_m *TaskServiceClient) ListTasks(ctx context.Context, in *taskpb.ListTaskR
 	_ca = append(_ca, _va...)
 	ret := _m.Called(_ca...)
 
-	var r0 *taskpb.ListTaskResponse
-	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.ListTaskRequest, ...grpc.CallOption) *taskpb.ListTaskResponse); ok {
+	var r0 taskpb.TaskService_ListTasksClient
+	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.ListTaskRequest, ...grpc.CallOption) taskpb.TaskService_ListTasksClient); ok {
 		r0 = rf(ctx, in, opts...)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*taskpb.ListTaskResponse)
+			r0 = ret.Get(0).(taskpb.TaskService_ListTasksClient)
 		}
 	}
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.ListTaskRequest, ...grpc.CallOption) error); ok {
+		r1 = rf(ctx, in, opts...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Login provides a mock function with given fields: ctx, in, opts
+func (_m *TaskServiceClient) Login(ctx context.Context, in *taskpb.LoginRequest, opts ...grpc.CallOption) (*taskpb.LoginResponse, error) {
+	_va := make([]interface{}, len(opts))
+	for _i := range opts {
+		_va[_i] = opts[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx, in)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *taskpb.LoginResponse
+	if rf, ok := ret.Get(0).(func(context.Context, *taskpb.LoginRequest, ...grpc.CallOption) *taskpb.LoginResponse); ok {
+		r0 = rf(ctx, in, opts...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*taskpb.LoginResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *taskpb.LoginRequest, ...grpc.CallOption) error); ok {
 		r1 = rf(ctx, in, opts...)
 	} else {
 		r1 = ret.Error(1)

@@ -18,10 +18,13 @@ const (
 func main() {
 	dependencies := di.NewBuild()
 
+	imageStore := services.NewDiskImageStore("img")
+
 	taskServer := services.NewTaskServer(dependencies.Usecases.CreateTaskUseCase,
 		dependencies.Usecases.FindTaskUseCase,
 		dependencies.Usecases.ListTaskUseCase,
-		dependencies.Usecases.LoginUseCase)
+		dependencies.Usecases.LoginUseCase,
+		imageStore)
 
 	grpcServer := grpc.NewServer()
 	taskpb.RegisterTaskServiceServer(grpcServer, taskServer)

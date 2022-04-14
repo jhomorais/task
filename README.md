@@ -63,6 +63,11 @@ make test
 make mock
 ```
 
+windows
+```
+path\go\bin\mockery.exe --all
+```
+
 ### Gen proto files
 ```bash
 make gen-proto

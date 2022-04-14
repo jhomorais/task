@@ -3,9 +3,9 @@ package contracts
 import (
 	"context"
 
-	"github.com/fgmaia/task/internal/usecases/ports/output"
+	"github.com/fgmaia/task/internal/domain/entities"
 )
 
 type ListTaskUseCase interface {
-	Execute(ctx context.Context, userID string) (*output.ListTaskOutput, error)
+	Execute(ctx context.Context, userID string, found func(task *entities.Task) error) error
 }

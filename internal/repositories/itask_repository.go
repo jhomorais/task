@@ -9,5 +9,5 @@ import (
 type TaskRepository interface {
 	CreateTask(ctx context.Context, entity *entities.Task) error
 	FindTask(ctx context.Context, id string) (*entities.Task, error)
-	ListTask(ctx context.Context) ([]*entities.Task, error)
+	ListTask(ctx context.Context, found func(task *entities.Task) error) error
 }

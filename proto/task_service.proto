@@ -28,7 +28,7 @@ message ListTaskRequest {
 }
 
 message ListTaskResponse {
-    repeated Task tasks = 1;
+    Task task = 1;
 }
 
 message LoginRequest {
@@ -40,9 +40,28 @@ message LoginResponse {
     string userId = 1;
 }
 
+message UploadImageRequest {
+    string userId = 1;
+    oneof data {
+        ImageInfo info = 2;
+        bytes chunck_data = 3;
+    }
+}
+
+message ImageInfo {
+    string task_id = 1;
+    string image_type = 2;
+}
+
+message UploadResponse {
+    string id = 1;
+    uint32 size = 2;
+}
+
 service TaskService {
     rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {};
     rpc FindTask(FindTaskRequest) returns (FindTaskResponse) {};
-    rpc ListTasks(ListTaskRequest) returns (ListTaskResponse) {};
+    rpc ListTasks(ListTaskRequest) returns (stream ListTaskResponse) {};
+    rpc UploadImage(stream UploadImageRequest) returns (UploadResponse) {};
     rpc Login(LoginRequest) returns (LoginResponse) {};
 }

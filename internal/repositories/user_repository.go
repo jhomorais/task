@@ -21,7 +21,7 @@ func (t *userRepository) CreateUser(ctx context.Context, entity *entities.User) 
 	entity.Password = utils.HashPassword(entity.Password, []byte(utils.SALT))
 	return t.db.
 		Session(&gorm.Session{FullSaveAssociations: false}).
-		Save(&entity).
+		Create(&entity).
 		Error
 }
 

@@ -20,7 +20,8 @@ const _ = grpc.SupportPackageIsVersion7
 type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
 	FindTask(ctx context.Context, in *FindTaskRequest, opts ...grpc.CallOption) (*FindTaskResponse, error)
-	ListTasks(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (*ListTaskResponse, error)
+	ListTasks(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (TaskService_ListTasksClient, error)
+	UploadImage(ctx context.Context, opts ...grpc.CallOption) (TaskService_UploadImageClient, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 }
 
@@ -50,13 +51,70 @@ func (c *taskServiceClient) FindTask(ctx context.Context, in *FindTaskRequest, o
 	return out, nil
 }
 
-func (c *taskServiceClient) ListTasks(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (*ListTaskResponse, error) {
-	out := new(ListTaskResponse)
-	err := c.cc.Invoke(ctx, "/taskpb.TaskService/ListTasks", in, out, opts...)
+func (c *taskServiceClient) ListTasks(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (TaskService_ListTasksClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[0], "/taskpb.TaskService/ListTasks", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &taskServiceListTasksClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TaskService_ListTasksClient interface {
+	Recv() (*ListTaskResponse, error)
+	grpc.ClientStream
+}
+
+type taskServiceListTasksClient struct {
+	grpc.ClientStream
+}
+
+func (x *taskServiceListTasksClient) Recv() (*ListTaskResponse, error) {
+	m := new(ListTaskResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *taskServiceClient) UploadImage(ctx context.Context, opts ...grpc.CallOption) (TaskService_UploadImageClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TaskService_ServiceDesc.Streams[1], "/taskpb.TaskService/UploadImage", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &taskServiceUploadImageClient{stream}
+	return x, nil
+}
+
+type TaskService_UploadImageClient interface {
+	Send(*UploadImageRequest) error
+	CloseAndRecv() (*UploadResponse, error)
+	grpc.ClientStream
+}
+
+type taskServiceUploadImageClient struct {
+	grpc.ClientStream
+}
+
+func (x *taskServiceUploadImageClient) Send(m *UploadImageRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *taskServiceUploadImageClient) CloseAndRecv() (*UploadResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UploadResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *taskServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
@@ -74,7 +132,8 @@ func (c *taskServiceClient) Login(ctx context.Context, in *LoginRequest, opts ..
 type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
 	FindTask(context.Context, *FindTaskRequest) (*FindTaskResponse, error)
-	ListTasks(context.Context, *ListTaskRequest) (*ListTaskResponse, error)
+	ListTasks(*ListTaskRequest, TaskService_ListTasksServer) error
+	UploadImage(TaskService_UploadImageServer) error
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
@@ -89,8 +148,11 @@ func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskReq
 func (UnimplementedTaskServiceServer) FindTask(context.Context, *FindTaskRequest) (*FindTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindTask not implemented")
 }
-func (UnimplementedTaskServiceServer) ListTasks(context.Context, *ListTaskRequest) (*ListTaskResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListTasks not implemented")
+func (UnimplementedTaskServiceServer) ListTasks(*ListTaskRequest, TaskService_ListTasksServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListTasks not implemented")
+}
+func (UnimplementedTaskServiceServer) UploadImage(TaskService_UploadImageServer) error {
+	return status.Errorf(codes.Unimplemented, "method UploadImage not implemented")
 }
 func (UnimplementedTaskServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
@@ -144,22 +206,51 @@ func _TaskService_FindTask_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskService_ListTasks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListTaskRequest)
-	if err := dec(in); err != nil {
+func _TaskService_ListTasks_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ListTaskRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TaskServiceServer).ListTasks(m, &taskServiceListTasksServer{stream})
+}
+
+type TaskService_ListTasksServer interface {
+	Send(*ListTaskResponse) error
+	grpc.ServerStream
+}
+
+type taskServiceListTasksServer struct {
+	grpc.ServerStream
+}
+
+func (x *taskServiceListTasksServer) Send(m *ListTaskResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TaskService_UploadImage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(TaskServiceServer).UploadImage(&taskServiceUploadImageServer{stream})
+}
+
+type TaskService_UploadImageServer interface {
+	SendAndClose(*UploadResponse) error
+	Recv() (*UploadImageRequest, error)
+	grpc.ServerStream
+}
+
+type taskServiceUploadImageServer struct {
+	grpc.ServerStream
+}
+
+func (x *taskServiceUploadImageServer) SendAndClose(m *UploadResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *taskServiceUploadImageServer) Recv() (*UploadImageRequest, error) {
+	m := new(UploadImageRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(TaskServiceServer).ListTasks(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/taskpb.TaskService/ListTasks",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServiceServer).ListTasks(ctx, req.(*ListTaskRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 func _TaskService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -196,14 +287,21 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskService_FindTask_Handler,
 		},
 		{
-			MethodName: "ListTasks",
-			Handler:    _TaskService_ListTasks_Handler,
-		},
-		{
 			MethodName: "Login",
 			Handler:    _TaskService_Login_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ListTasks",
+			Handler:       _TaskService_ListTasks_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "UploadImage",
+			Handler:       _TaskService_UploadImage_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "task_service.proto",
 }

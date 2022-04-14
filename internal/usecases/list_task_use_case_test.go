@@ -17,19 +17,9 @@ func TestListTask(t *testing.T) {
 	t.Parallel()
 
 	userTec1 := sample.NewUserEntityRole(entities.ROLE_TECHNICIAN)
-	userTec2 := sample.NewUserEntityRole(entities.ROLE_TECHNICIAN)
-	userTec3 := sample.NewUserEntityRole(entities.ROLE_TECHNICIAN)
-
-	var listTask = []*entities.Task{
-		sample.NewTaskEntityWithUser(*userTec1),
-		sample.NewTaskEntityWithUser(*userTec2),
-		sample.NewTaskEntityWithUser(*userTec1),
-		sample.NewTaskEntityWithUser(*userTec2),
-		sample.NewTaskEntityWithUser(*userTec3),
-	}
 
 	taskRepositoryMock := &mocks.TaskRepository{}
-	taskRepositoryMock.On("ListTask", mock.Anything).Return(listTask, nil)
+	taskRepositoryMock.On("ListTask", mock.Anything, mock.AnythingOfType("func(*entities.Task) error")).Return(nil)
 
 	t.Run("when userId is invalid should return an error", func(t *testing.T) {
 		t.Parallel()
@@ -46,13 +36,12 @@ func TestListTask(t *testing.T) {
 		listTaskUseCase := usecases.NewListTaskUseCase(userRepositoryMock,
 			taskRepositoryMock)
 
-		output, err := listTaskUseCase.Execute(context.Background(), userNoId.ID)
+		err := listTaskUseCase.Execute(context.Background(), userNoId.ID, nil)
 		require.Error(t, err)
-		require.Nil(t, output)
 
-		output, err = listTaskUseCase.Execute(context.Background(), userInvalidId.ID)
+		err = listTaskUseCase.Execute(context.Background(), userInvalidId.ID, nil)
 		require.Error(t, err)
-		require.Nil(t, output)
+
 	})
 
 	t.Run("when not found user should return an error", func(t *testing.T) {
@@ -66,9 +55,8 @@ func TestListTask(t *testing.T) {
 		listTaskUseCase := usecases.NewListTaskUseCase(userRepositoryMock,
 			taskRepositoryMock)
 
-		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
+		err := listTaskUseCase.Execute(context.Background(), userTec1.ID, nil)
 		require.Error(t, err)
-		require.Nil(t, output)
 	})
 
 	t.Run("when user role is differente of MANAGER should return an error", func(t *testing.T) {
@@ -80,9 +68,8 @@ func TestListTask(t *testing.T) {
 		listTaskUseCase := usecases.NewListTaskUseCase(userRepositoryMock,
 			taskRepositoryMock)
 
-		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
+		err := listTaskUseCase.Execute(context.Background(), userTec1.ID, nil)
 		require.Error(t, err)
-		require.Nil(t, output)
 	})
 
 	t.Run("when ListTask return an error", func(t *testing.T) {
@@ -95,14 +82,13 @@ func TestListTask(t *testing.T) {
 		userRepositoryMock.On("FindById", context.Background(), userTec1.ID).Return(userManager, nil)
 
 		taskRepositoryErrorMock := &mocks.TaskRepository{}
-		taskRepositoryErrorMock.On("ListTask", mock.Anything).Return(nil, errDatabase)
+		taskRepositoryErrorMock.On("ListTask", mock.Anything, mock.Anything).Return(errDatabase)
 
 		listTaskUseCase := usecases.NewListTaskUseCase(userRepositoryMock,
 			taskRepositoryErrorMock)
 
-		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
+		err := listTaskUseCase.Execute(context.Background(), userTec1.ID, nil)
 		require.Error(t, err)
-		require.Nil(t, output)
 	})
 
 	t.Run("when successfully ListTask", func(t *testing.T) {
@@ -116,9 +102,8 @@ func TestListTask(t *testing.T) {
 		listTaskUseCase := usecases.NewListTaskUseCase(userRepositoryMock,
 			taskRepositoryMock)
 
-		output, err := listTaskUseCase.Execute(context.Background(), userTec1.ID)
+		err := listTaskUseCase.Execute(context.Background(), userTec1.ID, nil)
 		require.NoError(t, err)
-		require.NotNil(t, output)
 	})
 
 }

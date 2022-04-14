@@ -23,6 +23,8 @@ func TestServerCreateTask(t *testing.T) {
 	//init dependencies, inversion of control DI
 	dependencies := di.NewBuild()
 
+	imageStore := services.NewDiskImageStore(".")
+
 	taskQueueMock := &mocks.RabbitMQ{}
 	taskQueueMock.On("Publish", mock.Anything, mock.Anything).Return(nil)
 
@@ -52,7 +54,8 @@ func TestServerCreateTask(t *testing.T) {
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
 			dependencies.Usecases.ListTaskUseCase,
-			dependencies.Usecases.LoginUseCase)
+			dependencies.Usecases.LoginUseCase,
+			imageStore)
 
 		res, err := server.CreateTask(ctx, req)
 		require.Error(t, err)
@@ -84,7 +87,8 @@ func TestServerCreateTask(t *testing.T) {
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
 			dependencies.Usecases.ListTaskUseCase,
-			dependencies.Usecases.LoginUseCase)
+			dependencies.Usecases.LoginUseCase,
+			imageStore)
 
 		res, err := server.CreateTask(ctx, req)
 		require.Error(t, err)
@@ -108,7 +112,8 @@ func TestServerCreateTask(t *testing.T) {
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
 			dependencies.Usecases.ListTaskUseCase,
-			dependencies.Usecases.LoginUseCase)
+			dependencies.Usecases.LoginUseCase,
+			imageStore)
 
 		res, err := server.CreateTask(ctx, req)
 		require.Error(t, err)
@@ -132,7 +137,8 @@ func TestServerCreateTask(t *testing.T) {
 		server := services.NewTaskServer(createTaskUseCase,
 			dependencies.Usecases.FindTaskUseCase,
 			dependencies.Usecases.ListTaskUseCase,
-			dependencies.Usecases.LoginUseCase)
+			dependencies.Usecases.LoginUseCase,
+			imageStore)
 
 		res, err := server.CreateTask(ctx, req)
 		require.NoError(t, err)

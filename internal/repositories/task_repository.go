@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"errors"
 
 	"github.com/fgmaia/task/internal/domain/entities"
 	"gorm.io/gorm"
@@ -35,15 +36,34 @@ func (c *taskRepository) FindTask(ctx context.Context, id string) (*entities.Tas
 	return entity, err
 }
 
-func (c *taskRepository) ListTask(ctx context.Context) ([]*entities.Task, error) {
+func (c *taskRepository) ListTask(ctx context.Context, found func(task *entities.Task) error) error {
 	//TODO impl pagination
 	var entities []*entities.Task
 
 	err := c.db.
 		Preload(clause.Associations).
 		Limit(100).
-		Order("realized_at desc").
+		Order("performed_at desc").
 		Find(&entities).Error
 
-	return entities, err
+	if err != nil {
+		return err
+	}
+
+	for _, task := range entities {
+
+		if ctx.Err() == context.Canceled {
+			return errors.New("request canceled")
+		}
+
+		if ctx.Err() == context.DeadlineExceeded {
+			return errors.New("deadline is exceeded")
+		}
+
+		if err := found(task); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
