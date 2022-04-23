@@ -97,6 +97,20 @@ func (_m *TaskServiceServer) Login(_a0 context.Context, _a1 *taskpb.LoginRequest
 	return r0, r1
 }
 
+// UploadImage provides a mock function with given fields: _a0
+func (_m *TaskServiceServer) UploadImage(_a0 taskpb.TaskService_UploadImageServer) error {
+	ret := _m.Called(_a0)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(taskpb.TaskService_UploadImageServer) error); ok {
+		r0 = rf(_a0)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // mustEmbedUnimplementedTaskServiceServer provides a mock function with given fields:
 func (_m *TaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {
 	_m.Called()

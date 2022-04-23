@@ -136,3 +136,33 @@ func (_m *TaskServiceClient) Login(ctx context.Context, in *taskpb.LoginRequest,
 
 	return r0, r1
 }
+
+// UploadImage provides a mock function with given fields: ctx, opts
+func (_m *TaskServiceClient) UploadImage(ctx context.Context, opts ...grpc.CallOption) (taskpb.TaskService_UploadImageClient, error) {
+	_va := make([]interface{}, len(opts))
+	for _i := range opts {
+		_va[_i] = opts[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 taskpb.TaskService_UploadImageClient
+	if rf, ok := ret.Get(0).(func(context.Context, ...grpc.CallOption) taskpb.TaskService_UploadImageClient); ok {
+		r0 = rf(ctx, opts...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(taskpb.TaskService_UploadImageClient)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, ...grpc.CallOption) error); ok {
+		r1 = rf(ctx, opts...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
